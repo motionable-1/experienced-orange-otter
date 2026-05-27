@@ -1,0 +1,43 @@
+{
+  "name": "hyperframes-template",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "predev": "npm run build:composition",
+    "dev": "vite",
+    "prebuild": "npm run build:composition",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:composition": "esbuild composition/src/main.tsx --bundle --minify --format=iife --global-name=MotionablR3FComposition --target=es2022 --define:process.env.NODE_ENV=\\\"production\\\" --outfile=composition/dist/main.js",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src composition/src && tsc --noEmit",
+    "lint:fix": "eslint src composition/src --fix && tsc --noEmit",
+    "prerender": "npm run build:composition",
+    "render": "npx --yes --package node@22 --package hyperframes@0.6.38 hyperframes render composition -o renders/output.mp4",
+    "doctor": "npx --yes --package node@22 --package hyperframes@0.6.38 hyperframes doctor",
+    "fix": "prettier --write src composition/src index.html composition/index.html && eslint src composition/src --fix && tsc --noEmit"
+  },
+  "dependencies": {
+    "@hyperframes/player": "0.6.38",
+    "@react-three/fiber": "^9.6.1",
+    "gsap": "3.15.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.184.1",
+    "esbuild": "^0.25.12",
+    "eslint": "^9.31.0",
+    "prettier": "3.6.0",
+    "typescript": "5.8.2",
+    "typescript-eslint": "^8.33.0",
+    "vite": "^6.0.7"
+  }
+}
