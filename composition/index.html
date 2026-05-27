@@ -73,10 +73,15 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
-      opacity: 1;
-      visibility: visible;
+      opacity: 0;
+      visibility: hidden;
       transform: translate3d(0, 0, 0);
       backface-visibility: hidden;
+    }
+
+    #scene-1 {
+      opacity: 1;
+      visibility: visible;
     }
 
     .scene-bg,
@@ -1270,6 +1275,17 @@
     const timeline = gsap.timeline({ paused: true });
     const totalDuration = 20.1;
     const durationAnchor = { value: 0 };
+    const sceneRanges = [
+      { selector: "#scene-1", start: 0, end: 2.8 },
+      { selector: "#scene-2", start: 2.8, end: 5.3 },
+      { selector: "#scene-3", start: 5.3, end: 9.3 },
+      { selector: "#scene-4", start: 9.3, end: 13.3 },
+      { selector: "#scene-5", start: 13.3, end: 16.5 },
+      { selector: "#scene-6", start: 16.5, end: totalDuration },
+    ];
+
+    gsap.set(".scene", { autoAlpha: 0 });
+    gsap.set("#scene-1", { autoAlpha: 1 });
 
     const syncR3FTime = () => {
       const time = timeline.time();
@@ -1291,6 +1307,12 @@
     timeline.eventCallback("onStart", syncR3FTime);
     timeline.eventCallback("onComplete", syncR3FTime);
     timeline.to(durationAnchor, { value: 1, duration: totalDuration, ease: "power1.inOut" }, 0);
+    sceneRanges.forEach((scene, index) => {
+      timeline.set(scene.selector, { autoAlpha: 1 }, scene.start);
+      if (index < sceneRanges.length - 1) {
+        timeline.set(scene.selector, { autoAlpha: 0 }, scene.end);
+      }
+    });
 
     revealText("#scene-1", 0.22);
     timeline.from("#scene-1 .copy-block", { opacity: 0, y: 54, scale: 0.98, duration: 0.72, ease: "power4.out" }, 0.14);
